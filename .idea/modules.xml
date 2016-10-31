@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://D:/Docum moyo/CS50/Dropbox/.idea/Dropbox.iml" filepath="D:/Docum moyo/CS50/Dropbox/.idea/Dropbox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SoftGrupProg.iml" filepath="$PROJECT_DIR$/.idea/SoftGrupProg.iml" />
+      <module fileurl="file://D:/SoftGrupProgTest/.idea/SoftGrupProgTest.iml" filepath="D:/SoftGrupProgTest/.idea/SoftGrupProgTest.iml" />
+    </modules>
+  </component>
+</project>
