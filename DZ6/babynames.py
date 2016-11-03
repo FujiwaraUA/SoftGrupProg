@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import sys
+# import sys
 import re
 
 """Завдання "Детячі імена"
@@ -95,8 +95,9 @@ babynames = {
 Якщо введено 'n' - вийдіть з програми.
 """
 
-import os
+# import os
 import sys
+
 
 def extract_names(filename):
     """
@@ -109,13 +110,32 @@ def extract_names(filename):
     ...
     }
     """
-    # +++ваш код+++
-    return
+    with open(filename, encoding='UTF-8') as f:
+        stroka = f.read()
+        pattern = ('<tr>\s*<td.*>\s*(.*)\s*</td>\s*<td.*>\s*(.*?)\s*'
+                   '\s*</td>\s*<td.*>\s*(.*?)\s*</td>\s*<td.*>\s*'
+                   '\s*(.*?)\s*</td>\s*<td.*>\s*(.*?)\s*'
+                   '\s*</td>\s*<td.*>\s*(.*?)\s*</td>\s*<td.*>\s*'
+                   '\s*(.*?)\s*</td>\s*</tr>')
+        list_name = re.findall(pattern, stroka)
+    dict_name = dict()
+    for key in list_name:
+        dict_name[key[1]] = list(key[2:])
+    return dict_name
 
 
 def print_names(babynames):
-    # +++ваш код+++
+    years = ['2012', '2010', '2005', '2000', '1990']
+    year = input('Який вас рік цікавить ?(Можливі варіанти: 2012, 2010, 2005, 2000, 1990): ')
+    list_key = list(babynames.keys())
+    list_key.sort()
+    for i in range(len(years)):
+        if year == years[i]:
+            print('В {} році:'.format(years[i]))
+            for key in list_key:
+                print(key, babynames[key][i])
     return
+
 
 def main():
     # Код розбору командної стрічки
@@ -131,6 +151,6 @@ def main():
     babynames = extract_names(filename)
     print_names(babynames)
 
-  
+
 if __name__ == '__main__':
     main()
