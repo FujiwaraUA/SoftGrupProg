@@ -18,7 +18,7 @@ except Exception as e:
 
 try:
     res = requests.get("http://api.openweathermap.org/data/2.5/weather",
-                 params={'id': city_id, 'units': 'metric', 'lang': 'ru', 'APPID': appid})
+                 params={'id': city_id, 'units': 'metric', 'lang': 'uk', 'APPID': appid})
     data = res.json()
     print("conditions:", data['weather'][0]['description'])
     print("temp:", data['main']['temp'])
