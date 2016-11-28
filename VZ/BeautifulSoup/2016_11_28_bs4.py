@@ -55,7 +55,7 @@ def parse(html):
             print('')
             for i in range(len(table2)):
                 table3 = table2[i].find_all('div')
-                print(table3[0].text, table3[1].text)
+                print('{0:7} {1}'.format(table3[0].text, table3[1].text))
 
         elif jac_data1[i].attrs['class'][1] != 'ad':
             # print(i)
@@ -67,7 +67,7 @@ def parse(html):
             print('')
             for i in range(len(table2)):
                 table3 = table2[i].find_all('div')
-                print(table3[0].text, table3[1].text)
+                print('{0:7} {1}'.format(table3[0].text, table3[1].text))
 
 
 
