@@ -25,4 +25,6 @@ lab_d3.grid(row=3, column=0, padx=20)
 lab1 = tkinter.Label(root, text='Парсінг: Яндекс Погода')
 lab1.grid(row=0, column=2, padx=2)
 
+lab1_j1 = tkinter.Label(root, text='Парсінг:\n Яндекс Погода')
+lab1_j1.grid(row=1, column=2, padx=2)
 root.mainloop()
