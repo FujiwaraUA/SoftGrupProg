@@ -21,13 +21,6 @@ def parse(html):
     # print(dict1)
     table = soup.find('div', 'tabs-panes__pane tabs-panes__pane_active_yes')
     jac_data = table.find_all('dt', 'forecast-detailed__day')
-    # print(len(jac_data))
-    # print(type(jac_data[0]))
-    # print(jac_data[0].prettify())
-    # print(jac_data[0].small.text)
-    # print(jac_data[0].attrs)
-    # print(jac_data[0]['data-anchor'])
-    # print(jac_data[0].strong.span.text)
     ls1 = []
     for i in range(len(jac_data)):
         if 'data-anchor' in jac_data[i].attrs:

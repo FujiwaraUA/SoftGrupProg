@@ -15,7 +15,8 @@ def naz(event):
 
 
 root = tkinter.Tk()
-but = tkinter.Button(root, text='Друк')
+but = tkinter.Button(root, text='Друк', bg="red",fg="blue")
+lab = tkinter.Label(root, text="Это метка! \n Из двух строк.", font="Arial 18")
 
 but.bind('<Button-1>', naz)
 but.pack()

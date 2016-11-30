@@ -19,8 +19,9 @@ import tkinter
 
 
 class But_print:
-    def __init__(self):
-        self.but = tkinter.Button(root)
+    def __init__(self, tk):
+        self.tk = tk
+        self.but = tkinter.Button(tk)
         self.but["text"] = "Печать"
         self.but.bind("<Button-1>", self.printer)
         self.but.pack()
@@ -30,5 +31,5 @@ class But_print:
 
 
 root = tkinter.Tk()
-obj = But_print()
+obj = But_print(root)
 root.mainloop()

@@ -39,6 +39,7 @@
         "humidity": 95
       }
     },
+
     {
       "clouds": {
         "all": 80
