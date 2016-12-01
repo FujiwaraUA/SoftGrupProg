@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import requests
+import tkinter
 
 
 class OpenweathermapAPI:
     """сайт http://openweathermap.org, дані по API"""
+
     def __init__(self):
         self.url_find = 'http://api.openweathermap.org/data/2.5/find'
         self.url_forecast = 'http://api.openweathermap.org/data/2.5/forecast'
@@ -23,8 +25,8 @@ class OpenweathermapAPI:
             self.city_country = '{} ({})'.format(self.data_json['list'][0]['name'],
                                                  self.data_json['list'][0]['sys']['country'])
             return self.city_id, self.city_country
-        except Exception as error:
-            return "Exception (find_id):{}".format(error)
+        except Exception as e:
+            return "Exception (find_id):{}".format(e)
 
     def weather_forecast(self, city_id):
         """Отримати погоду по id. """
@@ -49,9 +51,30 @@ class OpenweathermapAPI:
                     self.str_api += '\n{0:^14}\n\n'.format(self.date[0])
                     self.str_api += self.forecast
             return self.str_api, self.ls1
-        except Exception as error:
-            return "Exception (weather_forecast):{}".format(error)
+        except Exception as e:
+            return "Exception (weather_forecast):{}".format(e)
 
+
+def window(str_api, str_pars):
+    root = tkinter.Tk()
+    root.title('Погодний аналізатор')
+    root.geometry('500x800+300+100')
+    lab = tkinter.Label(root, text='API: openweathermap.org')
+    lab.grid(row=0, column=0, padx=20)
+
+    lab_d1 = tkinter.Label(root, text=str_api, justify='left')
+    lab_d1.grid(row=1, column=0, padx=20)
+
+    lab1 = tkinter.Label(root, text='Парсінг: Яндекс Погода')
+    lab1.grid(row=0, column=2, padx=2)
+
+    lab1_j1 = tkinter.Label(root, text=str_pars)
+    lab1_j1.grid(row=1, column=2, padx=2)
+    root.mainloop()
+
+
+'''
+на період відладки
 
 city = 'Тернопіль'
 find_id1 = OpenweathermapAPI()
@@ -61,10 +84,14 @@ if len(find2) == 2:
     city_id, city_owm = find2
 else:
     city_owm = find2
+'''
+city_id, city_owm = (691650, 'Ternopil (Ukraine)')
+find_id1 = OpenweathermapAPI()
 
 # city_id, city_owm = find2 if len(find2) == 2 else city_owm = find2 - чому неправильно ?
-print(city_owm)
 forecast_Ternopil = find_id1.weather_forecast(city_id)
-print(forecast_Ternopil[0])
 
+str_api = '{0}\n{1}'.format(city_owm, forecast_Ternopil[0])
+str_pars = 'pars'
 
+window(str_api, str_pars)
