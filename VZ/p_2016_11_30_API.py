@@ -2,10 +2,10 @@
 
 import requests
 import tkinter
-
+from bs4 import BeautifulSoup
 
 class OpenweathermapAPI:
-    """сайт http://openweathermap.org, дані по API"""
+    """сайт http://openweathermap.org, дані по API."""
 
     def __init__(self):
         self.url_find = 'http://api.openweathermap.org/data/2.5/find'
@@ -55,9 +55,9 @@ class OpenweathermapAPI:
             return "Exception (weather_forecast):{}".format(e)
 
 
-def window(str_api, str_pars):
+def window(str_api, str_parse):
     root = tkinter.Tk()
-    root.title('Погодний аналізатор')
+    root.title('Прогноз погоди')
     root.geometry('500x800+300+100')
     lab = tkinter.Label(root, text='API: openweathermap.org')
     lab.grid(row=0, column=0, padx=20)
@@ -65,12 +65,63 @@ def window(str_api, str_pars):
     lab_d1 = tkinter.Label(root, text=str_api, justify='left')
     lab_d1.grid(row=1, column=0, padx=20)
 
-    lab1 = tkinter.Label(root, text='Парсінг: Яндекс Погода')
+    lab1 = tkinter.Label(root, text='Парсинг: Яндекс Погода')
     lab1.grid(row=0, column=2, padx=2)
 
-    lab1_j1 = tkinter.Label(root, text=str_pars)
+    lab1_j1 = tkinter.Label(root, text=str_parse, justify='left')
     lab1_j1.grid(row=1, column=2, padx=2)
     root.mainloop()
+
+'''Поки функцією'''
+
+url = 'https://yandex.ua/pogoda/ternopol/details'
+
+def get_html(url):
+    """Отримати HTML сторінку. """
+    try:
+        response = requests.get(url)
+        return response.text
+    except Exception as e:
+        return "Exception (get_html):{}".format(e)
+
+def parse(html):
+    """Отримати погоду з HTML сторінки. """
+    try:
+        str_parse = ''
+        soup = BeautifulSoup(html, 'html.parser')
+        head = soup.find('h1', 'title title_level_1')
+        str_parse += '{}\n'.format(head.text)
+        days = soup.find_all('dt', 'forecast-detailed__day')
+        ls_days = []
+        for i in days:
+            if 'data-anchor' in i.attrs:
+                day = i.attrs['data-anchor']
+                month_teg = i.find('span', 'forecast-detailed__day-month')
+                month = month_teg.text
+                ls_days.append('{0} {1}'.format(day, month))
+        tables_weather = soup.find_all('table', 'weather-table')
+        for i, value in enumerate(tables_weather):
+            str_parse += '\n{0:^20}\n\n'.format(ls_days[i])
+            row = value.find_all('tr', 'weather-table__row')
+            for day_part in row:
+                day_part_name = day_part.find('div', 'weather-table__daypart')
+                day_part_name = day_part_name.text
+                day_part_t = day_part.find('div', 'weather-table__temp')
+                day_part_t = day_part_t.text
+                day_part_v_td = day_part.find('td', 'weather-table__body-cell_type_condition')
+                day_part_v = day_part_v_td.find('div', 'weather-table__value')
+                day_part_v = day_part_v.text
+                day_part_str = '{0:7} {1:7} {2}'.format(day_part_name, day_part_t, day_part_v)
+                str_parse += '{}\n'.format(day_part_str)
+        return str_parse
+    except Exception as e:
+        return "Exception (parse):{}".format(e)
+
+
+html_text = get_html(url)
+str_parse = parse(html_text)
+
+
 
 
 '''
@@ -92,6 +143,6 @@ find_id1 = OpenweathermapAPI()
 forecast_Ternopil = find_id1.weather_forecast(city_id)
 
 str_api = '{0}\n{1}'.format(city_owm, forecast_Ternopil[0])
-str_pars = 'pars'
+# str_parse = 'parse'
 
-window(str_api, str_pars)
+window(str_api, str_parse)
