@@ -72,6 +72,7 @@ def window(str_api, str_parse):
     lab1_j1.grid(row=1, column=2, padx=2)
     root.mainloop()
 
+
 '''Поки функцією'''
 
 url = 'https://yandex.ua/pogoda/ternopol/details'
@@ -101,7 +102,7 @@ def parse(html):
                 ls_days.append('{0} {1}'.format(day, month))
         tables_weather = soup.find_all('table', 'weather-table')
         for i, value in enumerate(tables_weather):
-            str_parse += '\n{0:^20}\n\n'.format(ls_days[i])
+            str_parse += '{0:^20}\n'.format(ls_days[i])
             row = value.find_all('tr', 'weather-table__row')
             for day_part in row:
                 day_part_name = day_part.find('div', 'weather-table__daypart')
