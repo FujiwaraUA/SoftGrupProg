@@ -7,6 +7,7 @@ class Window:
     """GUI"""
 
     def __init__(self):
+        self.id = 0
         self.root = tkinter.Tk()
         self.root.title('Прогноз погоди')
         self.root.geometry('1000x750+300+150')
@@ -24,13 +25,13 @@ class Window:
         self.pars_button.bind("<Button-1>", self.pars_frame)
         self.root.mainloop()
 
-    def pars_frame(self, event):
+    def pars_frame(self):
         self.root_frame.grid_forget()
         self.root_frame = tkinter.Frame(self.root, width=950, height=500, bg='#CFD8DC', bd=10)
         self.root_frame.grid(row=2, column=0, columnspan=3, padx=25)
 
 
-    def api_frame(self, event):
+    def api_frame(self):
         self.root_frame.grid_forget()
         self.root_frame = tkinter.Frame(self.root, width=950, height=500, bg='#CFD8DC', bd=10)
         self.root_frame.grid(row=2, column=0, columnspan=3, padx=25)
@@ -63,6 +64,15 @@ class Window:
         self.day_4_label.grid(row=1, column=0, pady=5, padx=5)
         self.day_5_label.grid(row=1, column=1, pady=5, padx=5)
         self.day_6_label.grid(row=1, column=2, pady=5, padx=5)
+
+        self.id_button.bind("<Button-1>", self.api_id)
+        self.weather_button.bind("<Button-1>", self.api_weather)
+
+    def api_id(self, event):
+        pass
+
+    def api_weather(self, event):
+        pass
 
 
 window_root = Window()
