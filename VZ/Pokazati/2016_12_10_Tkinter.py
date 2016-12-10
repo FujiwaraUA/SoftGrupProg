@@ -9,13 +9,14 @@ class Window:
     def __init__(self, owmapi):
         self.id = 0
         self.owmapi = owmapi
+        self.id_name = ()
         self.root = tkinter.Tk()
         self.root.title('Прогноз погоди')
         self.root.geometry('900x800+200+100')
         self.title_label = tkinter.Label(self.root, text='ПОГОДНІ СЕРВІСИ', font='arial 20')
         self.api_button = tkinter.Button(self.root, width=25, text='API: openweathermap.org', font='arial 14')
         self.pars_button = tkinter.Button(self.root, width=25, text='Парсинг: Яндекс Погода', font='arial 14')
-        self.root_frame = tkinter.Frame(self.root, width=950, height=500, bg='#CFD8DC', bd=10)
+        self.root_frame = tkinter.Frame(self.root, width=850, height=500, bg='#CFD8DC', bd=10)
 
         self.title_label.grid(row=0, column=1, pady=5)
         self.api_button.grid(row=1, column=0, pady=20, padx=15)
@@ -28,7 +29,7 @@ class Window:
 
     def pars_frame(self, event):
         self.root_frame.grid_forget()
-        self.root_frame = tkinter.Frame(self.root, width=950, height=500, bg='#CFD8DC', bd=10)
+        self.root_frame = tkinter.Frame(self.root, width=850, height=500, bg='#CFD8DC', bd=10)
         self.root_frame.grid(row=2, column=0, columnspan=3, padx=25)
 
 
@@ -45,18 +46,18 @@ class Window:
         self.weather_button = tkinter.Button(self.root_frame, width=25, text='Прогноз погоди / оновити.',
                                              font='arial 12')
         self.weather_frame = tkinter.Frame(self.root_frame, bg='#ECEFF1')
-        self.day_1_label = tkinter.Label(self.weather_frame, text='day_1', font='arial 12', bg='#CFD8DC',
-                                         justify='left', width=20, height=12, anchor='n')
-        self.day_2_label = tkinter.Label(self.weather_frame, text='day_2', font='arial 12', bg='#CFD8DC',
-                                         justify='left', width=20, height=12, anchor='n')
-        self.day_3_label = tkinter.Label(self.weather_frame, text='day_3', font='arial 12', bg='#CFD8DC',
-                                         justify='left', width=20, height=12, anchor='n')
-        self.day_4_label = tkinter.Label(self.weather_frame, text='day_4', font='arial 12', bg='#CFD8DC',
-                                         justify='left', width=20, height=12, anchor='n')
-        self.day_5_label = tkinter.Label(self.weather_frame, text='day_5', font='arial 12', bg='#CFD8DC',
-                                         justify='left', width=20, height=12, anchor='n')
-        self.day_6_label = tkinter.Label(self.weather_frame, text='day_6', font='arial 12', bg='#CFD8DC',
-                                         justify='left', width=20, height=12, anchor='n')
+        self.day_1_label = tkinter.Label(self.weather_frame, font='arial 12', bg='#CFD8DC',
+                                         justify='left', width=22, height=12, anchor='n')
+        self.day_2_label = tkinter.Label(self.weather_frame, font='arial 12', bg='#CFD8DC',
+                                         justify='left', width=22, height=12, anchor='n')
+        self.day_3_label = tkinter.Label(self.weather_frame, font='arial 12', bg='#CFD8DC',
+                                         justify='left', width=22, height=12, anchor='n')
+        self.day_4_label = tkinter.Label(self.weather_frame, font='arial 12', bg='#CFD8DC',
+                                         justify='left', width=22, height=12, anchor='n')
+        self.day_5_label = tkinter.Label(self.weather_frame, font='arial 12', bg='#CFD8DC',
+                                         justify='left', width=22, height=12, anchor='n')
+        self.day_6_label = tkinter.Label(self.weather_frame, font='arial 12', bg='#CFD8DC',
+                                         justify='left', width=22, height=12, anchor='n')
         self.name_city_label.grid(row=0, column=0, pady=20, padx=15)
         self.name_city_entry.grid(row=0, column=1, pady=20, padx=15)
         self.id_button.grid(row=0, column=2, pady=20, padx=15)
@@ -74,6 +75,9 @@ class Window:
 
         self.id_button.bind("<Button-1>", self.api_id)
         self.weather_button.bind("<Button-1>", self.api_weather)
+        if len(self.id_name) != 0:
+            self.city_label['text'] = 'Місто:{}'.format(self.id_name[1])
+            self.id_label['text'] = 'id:{}'.format(str(self.id_name[0]))
 
     def api_id(self, event):
         self.name_city_ent = self.name_city_entry.get()
@@ -83,6 +87,7 @@ class Window:
         self.id = self.id_name[0]
 
 
+
     def api_weather(self, event):
         self.weather_str = self.owmapi.weather_forecast(self.id)
         self.day_1_label['text'] = self.weather_str[1][0]
@@ -90,7 +95,8 @@ class Window:
         self.day_3_label['text'] = self.weather_str[1][2]
         self.day_4_label['text'] = self.weather_str[1][3]
         self.day_5_label['text'] = self.weather_str[1][4]
-        self.day_6_label['text'] = self.weather_str[1][5]
+        if len(self.weather_str[1]) == 6:
+            self.day_6_label['text'] = self.weather_str[1][5]
 
 
 
