@@ -25,18 +25,27 @@ class Window:
         self.pars_button.grid(row=1, column=2, pady=20, padx=15)
         self.root_frame.grid(row=2, column=0, columnspan=3, padx=25)
 
-        self.api_button.bind("<Button-1>", self.api_frame)
-        self.pars_button.bind("<Button-1>", self.pars_frame)
+        self.api_button.bind('<Button-1>', self.api_frame)
+        self.pars_button.bind('<Button-1>', self.pars_frame)
         self.root.mainloop()
 
     def pars_frame(self, event):
-        self.ls_city = ['terebovlya', 'ternopol']
-        self.html_pars = self.pars.get_html(self.ls_city[1])
+        self.ls_city = ['Тернопіль', 'Теребовля']
+        self.dict_city = {'Тернопіль':'ternopol', 'Теребовля':'terebovlya'}
+
+        self.html_pars = self.pars.get_html(self.dict_city['Тернопіль'])
         self.pars_data = self.pars.parse(self.html_pars)
         self.root_frame.grid_forget()
         self.root_frame = tkinter.Frame(self.root, width=1150, height=500, bg='#CFD8DC', bd=10)
         self.root_frame.grid(row=2, column=0, columnspan=3, padx=25)
-        self.name_city_labelp = tkinter.Label(self.root_frame, text=self.pars_data[0], font='arial 12', bg='#CFD8DC')
+        self.varp = tkinter.StringVar(self.root_frame)
+        self.varp.set(self.ls_city[0])
+        self.city_selectp = tkinter.OptionMenu(self.root_frame, self.varp, *self.ls_city)
+        self.city_selectp.config(font='arial 14')
+        self.pars_city_button = tkinter.Button(self.root_frame, font='arial 14', text='Прогноз погоди')
+
+
+        self.name_city_labelp = tkinter.Label(self.root_frame, text=self.pars_data[0], font='arial 14', bg='#CFD8DC')
         self.weather_framep = tkinter.Frame(self.root_frame, bg='#ECEFF1')
 
         self.day_1_labelp = tkinter.Label(self.weather_framep, font='arial 12', text=self.pars_data[1][0], bg='#CFD8DC',
@@ -60,9 +69,10 @@ class Window:
         self.day_10_labelp = tkinter.Label(self.weather_framep, font='arial 12', text=self.pars_data[1][9], bg='#CFD8DC',
                                          justify='left', width=22, height=14, anchor='n')
 
-
-        self.name_city_labelp.grid(row=0, column=1, pady=20, padx=15)
-        self.weather_framep.grid(row=1, column=0, columnspan=3, pady=15, padx=25)
+        self.city_selectp.grid(row=0, column=1)
+        self.pars_city_button.grid(row=0, column=2)
+        self.name_city_labelp.grid(row=1, column=1, pady=20, padx=15)
+        self.weather_framep.grid(row=2, column=0, columnspan=3, pady=15, padx=25)
         self.day_1_labelp.grid(row=0, column=0, pady=5, padx=5)
         self.day_2_labelp.grid(row=0, column=1, pady=5, padx=5)
         self.day_3_labelp.grid(row=0, column=2, pady=5, padx=5)
@@ -74,6 +84,22 @@ class Window:
         self.day_9_labelp.grid(row=1, column=3, pady=5, padx=5)
         self.day_10_labelp.grid(row=1, column=4, pady=5, padx=5)
 
+        self.pars_city_button.bind('<Button-1>', self.pars_city)
+
+    def pars_city(self, event):
+        self.html_pars = self.pars.get_html(self.dict_city[self.varp.get()])
+        self.pars_data = self.pars.parse(self.html_pars)
+        self.name_city_labelp['text'] = self.pars_data[0]
+        self.day_1_labelp['text'] = self.pars_data[1][0]
+        self.day_2_labelp['text'] = self.pars_data[1][1]
+        self.day_3_labelp['text'] = self.pars_data[1][2]
+        self.day_4_labelp['text'] = self.pars_data[1][3]
+        self.day_5_labelp['text'] = self.pars_data[1][4]
+        self.day_6_labelp['text'] = self.pars_data[1][5]
+        self.day_7_labelp['text'] = self.pars_data[1][6]
+        self.day_8_labelp['text'] = self.pars_data[1][7]
+        self.day_9_labelp['text'] = self.pars_data[1][8]
+        self.day_10_labelp['text'] = self.pars_data[1][9]
 
     def api_frame(self, event):
         self.root_frame.grid_forget()
@@ -120,14 +146,14 @@ class Window:
         self.day_5_label.grid(row=1, column=1, pady=5, padx=5)
         self.day_6_label.grid(row=1, column=2, pady=5, padx=5)
 
-        self.id_button.bind("<Button-1>", self.api_id)
-        self.weather_button.bind("<Button-1>", self.api_weather)
+        self.id_button.bind('<Button-1>', self.api_id)
+        self.weather_button.bind('<Button-1>', self.api_weather)
 
     def api_id(self, event):
         self.name_city_ent = self.name_city_entry.get()
         self.id_name = self.owmapi.find_id(self.name_city_ent)
         self.city_select['menu'].delete(0, 'end')
-        if type(self.id_name) == dict:
+        if len(self.id_name) > 0 and type(self.id_name) == dict:
             self.city_from_dict = tuple(self.id_name.keys())
             self.var.set(self.city_from_dict[0])
             for city in self.city_from_dict:
@@ -172,7 +198,7 @@ class OpenweathermapAPI:
                 self.dict_id[self.city_country] = self.city_id
             return self.dict_id
         except Exception as e:
-            return "Exception (find_id):{}".format(e)
+            return 'Exception (find_id):{}'.format(e)
 
     def weather_forecast(self, city_id):
         """Отримати погоду по id. """
@@ -204,7 +230,7 @@ class OpenweathermapAPI:
                     self.str_api += self.forecast
             return self.str_api, self.ls2
         except Exception as e:
-            return "Exception (weather_forecast):{}".format(e)
+            return 'Exception (weather_forecast):{}'.format(e)
 
 
 class YandexWeatherParse:
@@ -224,7 +250,7 @@ class YandexWeatherParse:
             response = requests.get(self.url)
             return response.text
         except Exception as e:
-            return "Exception (get_html):{}".format(e)
+            return 'Exception (get_html):{}'.format(e)
 
     def parse(self, html):
         """Отримати погоду з HTML сторінки. """
@@ -256,7 +282,7 @@ class YandexWeatherParse:
                     self.ls_days2[i] += '\n{}\n'.format(day_part_str)
             return self.head.text, self.ls_days2
         except Exception as e:
-            return "Exception (parse):{}".format(e)
+            return 'Exception (parse):{}'.format(e)
 
 
 owmapi = OpenweathermapAPI()
